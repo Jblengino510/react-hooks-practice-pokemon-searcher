@@ -4,7 +4,7 @@ import PokemonForm from "./PokemonForm";
 import Search from "./Search";
 import { Container } from "semantic-ui-react";
 
-function PokemonPage({ Data }) {
+function PokemonPage() {
   const [ pokeArr, setPokeArr] = useState([])
   const [ searchTerm, setSearchTerm] = useState("")
 
@@ -14,15 +14,21 @@ function PokemonPage({ Data }) {
     .then(setPokeArr)
   }, [searchTerm])
 
+  function handleAddPokemon(newPokemon){
+    setPokeArr([...pokeArr, newPokemon])
+  }
+
+  const filteredPokemon = pokeArr.filter(pokemon => pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()))
+
   return (
     <Container>
       <h1>Pokemon Searcher</h1>
       <br />
-      <PokemonForm />
+      <PokemonForm onAddPokemon={handleAddPokemon}/>
       <br />
-      <Search />
+      <Search searchTerm={searchTerm} onChangeSearch={setSearchTerm}/>
       <br />
-      <PokemonCollection pokeArr={pokeArr}/>
+      <PokemonCollection pokeArr={filteredPokemon}/>
     </Container>
   );
 }
